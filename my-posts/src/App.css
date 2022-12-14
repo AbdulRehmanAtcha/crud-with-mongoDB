@@ -1,0 +1,88 @@
+body{
+  overflow-x: hidden;
+}
+.nav{
+  height: 55px;
+  width: 100%;
+  background-color: #435D7D;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav .find form input{
+  height: 35px;
+  width: 450px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+.nav .find form button{
+  height: 39px;
+  width: 70px;
+  border-radius: 5px;
+  /* border: none; */
+  margin-left: 5px;
+  cursor: pointer;
+}
+.add-button form button{
+  /* background-color: #28A745; */
+  height: 39px;
+  width: 120px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.add-form{
+  height: 500px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.add-form .box{
+  height: 400px;
+  width: 400px;
+  /* background-color: #aaaaaa; */
+  background-color: #aaaaaa;
+  border-radius: 5px;
+  transition: transform 0.9s ease-in-out;
+  position: absolute;
+}
+.hide-add, .hide-edit{
+  transform: translateY(-600px);
+}
+
+.show-add, .show-edit{
+  transform: translateY(0px);
+}
+.add-form .box form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 15px;
+  height: 400px;
+  width: 400px;
+}
+.add-form .box form input{
+  width: 97%;
+  height: 35px;
+  border-radius: 8px;
+}
+.add-form .box form textarea{
+  resize: none;
+}
+.add-form .box form button{
+  height: 40px;
+  width: 97%;
+  border: none;
+  background-color: #28A745;
+  border-radius: 8px;
+  color: aliceblue;
+  cursor: pointer;
+}
+
