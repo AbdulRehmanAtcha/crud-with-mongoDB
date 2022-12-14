@@ -51,7 +51,7 @@ function App() {
       })
       .catch(function (error) {
         // handle error
-        console.log("Error", error);
+        console.log("error", error);
       })
   }
 
