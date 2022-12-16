@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 const app = express()
 const port = process.env.PORT || 5001;
-const MongoDBURI = process.env.MongoDBURI || "mongodb+srv://dbuser:dbpassword@cluster0.zcczzqa.mongodb.net/abcdatabase?retryWrites=true&w=majority";   
+const MongoDBURI = process.env.MongoDBURI || "mongodb+srv://dbuser:dbpassword@cluster0.zcczzqa.mongodb.net/?retryWrites=true&w=majority";   
 
 app.use(cors());
 app.use(express.json());
