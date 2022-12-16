@@ -1,16 +1,14 @@
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
-import mongoose from 'mongoose';  
-console.log("heeyy");
+import mongoose from 'mongoose';
+
 const app = express()
-const port =  process.env.PORT || 5001;
-const MongoDBURI = process.env.MongoDBURI || "mongodb+srv://Abdul_22:moton123@cluster0.zcczzqa.mongodb.net/?retryWrites=true&w=majority";
+const port = process.env.PORT || 5001;
+const MongoDBURI = process.env.MongoDBURI || "mongodb+srv://dbuser:dbpassword@cluster0.zcczzqa.mongodb.net/abcdatabase?retryWrites=true&w=majority";   
 
-app.use(express.json());
 app.use(cors());
-// mongoose.connect(MongoDBURI);
-
+app.use(express.json());
 
 let productSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -19,7 +17,6 @@ let productSchema = new mongoose.Schema({
     createdOn: { type: Date, default: Date.now }
 });
 const productModel = mongoose.model('products', productSchema); 
-
 
 let products = [];
 
@@ -67,10 +64,19 @@ app.post('/product', (req,res)=>{
     //     data: products
     // });
 })
-app.get('/products', (req,res)=>{
-    res.send({
-        message: "",
-        data: products
+app.get('/products', (req, res) => {
+
+    productModel.find({}, (err, data) => {
+        if (!err) {
+            res.send({
+                message: "got all products successfully",
+                data: data
+            })
+        } else {
+            res.status(500).send({
+                message: "server error"
+            })
+        }
     });
 })
 

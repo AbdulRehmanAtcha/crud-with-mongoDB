@@ -15,10 +15,6 @@ function App() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  // const [productEditName, setProductEditName] = useState("");
-  // const [productEditPrice, setProductEditPrice] = useState("");
-  // const [productEditDescription, setProductEditDescription] = useState("");
-  const [editId, setEditId] = useState(null)
 
   const addObj = {
     name: name,
@@ -32,10 +28,6 @@ function App() {
     setShowAdd(true);
   }
 
-  const showEditBox = async (names, price, desc) => {
-    // e.preventDefault();
-    setShowEdit(true);
-  }
 
   const hideAddBox = (e) => {
     e.preventDefault();
@@ -44,34 +36,33 @@ function App() {
     console.log(price);
     console.log(description);
     axios.post(`${baseUrl}/product`, addObj)
-      .then(function (response) {
-        // handle success
-        console.log(response.data.data);
-        allPosts();
-      })
-      .catch(function (error) {
-        // handle error
-        console.log("error", error);
-      })
+    .then(response => {
+      console.log("response: ", response.data);
+      allPosts();
+
+    })
+    .catch(err => {
+      console.log("error: ", err);
+    })
   }
 
   const hideEditBox = (e) => {
     e.preventDefault();
     setShowEdit(false); 
 
-    axios.put(`${baseUrl}/product/${editId}`, {
-      name: name,
-      price: price,
-      description: description
+    // axios.put(`${baseUrl}/product/${editId}`, {
+    //   name: name,
+    //   price: price,
+    //   description: description
 
-    })
-      .then((response) => {
-        console.log(response);
-        allPosts();
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //     allPosts();
 
-      }, (error) => {
-        console.log(error);
-      });
+    //   }, (error) => {
+    //     console.log(error);
+    //   });
   }
 
   const allPosts = async () => {
@@ -159,22 +150,16 @@ function App() {
               <th scope="col">Product Name</th>
               <th scope="col">Product Price</th>
               <th scope="col">Product Description</th>
-              <th scope="col">Edit Choice</th>
               <th scope="col">Delete Choice</th>
             </tr>
           </thead>
           <tbody>
             {products.map((eachProduct, i) => (
               <tr key={i}>
-                <th scope="row">{eachProduct.id}</th>
+                <th scope="row">{eachProduct._id}</th>
                 <td>{eachProduct.name}</td>
                 <td>{eachProduct.price}</td>
                 <td>{eachProduct.description}</td>
-                <td><button className="btn btn-warning" onClick={() => {
-                  showEditBox(
-                    eachProduct
-                  )
-                }}>EDIT</button></td>
                 <td><button className="btn btn-danger" onClick={() => {
                   deletProduct(eachProduct.id)
                 }}>DELETE</button></td>
