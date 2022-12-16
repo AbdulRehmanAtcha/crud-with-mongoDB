@@ -36,19 +36,19 @@ function App() {
     console.log(price);
     console.log(description);
     axios.post(`${baseUrl}/product`, addObj)
-    .then(response => {
-      console.log("response: ", response.data);
-      allPosts();
+      .then(response => {
+        console.log("response: ", response.data);
+        allPosts();
 
-    })
-    .catch(err => {
-      console.log("error: ", err);
-    })
+      })
+      .catch(err => {
+        console.log("error: ", err);
+      })
   }
 
   const hideEditBox = (e) => {
     e.preventDefault();
-    setShowEdit(false); 
+    setShowEdit(false);
 
     // axios.put(`${baseUrl}/product/${editId}`, {
     //   name: name,
@@ -95,17 +95,12 @@ function App() {
   }
 
 
+
   return (
     <>
       <body>
         <div className="nav">
           <h2>Manage Products</h2>
-          <div className="find">
-            <form>
-              <input type="text" placeholder='Search Product.' />
-              <button className="btn btn-success">Search</button>
-            </form>
-          </div>
           <div className="add-button">
             <form onSubmit={showAddBox}>
               <button type="submit button" className="btn btn-success">Add Product</button>
@@ -127,6 +122,7 @@ function App() {
               <button type='submit'>ADD</button>
             </form>
           </div>
+
           <div className={showEdit ? "box show-edit" : "box hide-edit"}>
             <form onSubmit={hideEditBox}>
               <input type="text" placeholder='Name Of Product.' required minLength="3" onChange={(e) => {
@@ -161,7 +157,7 @@ function App() {
                 <td>{eachProduct.price}</td>
                 <td>{eachProduct.description}</td>
                 <td><button className="btn btn-danger" onClick={() => {
-                  deletProduct(eachProduct.id)
+                  deletProduct(eachProduct._id)
                 }}>DELETE</button></td>
               </tr>
             ))}

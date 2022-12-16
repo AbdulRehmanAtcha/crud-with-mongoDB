@@ -5,15 +5,15 @@ import mongoose from 'mongoose';
 
 const app = express()
 const port = process.env.PORT || 5001;
-const MongoDBURI = process.env.MongoDBURI || "mongodb+srv://dbuser:dbpassword@cluster0.zcczzqa.mongodb.net/?retryWrites=true&w=majority";   
+const MongoDBURI = process.env.MongoDBURI || "mongodb+srv://abdul:abdulpassword@cluster0.zcczzqa.mongodb.net/test?retryWrites=true&w=majority";   
 
 app.use(cors());
 app.use(express.json());
 
 let productSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    price: {type: Number, required: true },
-    description: {type: String, required: true},
+    price: Number,
+    description: String,
     createdOn: { type: Date, default: Date.now }
 });
 const productModel = mongoose.model('products', productSchema); 
@@ -53,6 +53,7 @@ app.post('/product', (req,res)=>{
                     message: "your product is saved"
                 })
             } else {
+                console.log("Not Gone");
                 res.status(500).send({
                     message: "server error"
                 })
@@ -81,45 +82,62 @@ app.get('/products', (req, res) => {
 })
 
 app.get('/product/:id', (req, res)=>{
-    let isProductFound = false;
     const id = req.params.id;
-    for(let i = 0; i<products.length; i++){
-        if(products[i].id == id){
-            res.send({
-                message: `Product Found ${products[i]}`,
-                data: products[i]
-            });
-            isProductFound = true;
-            break;
+    productModel.findOne({_id: id}, (err,data)=>{
+        if(!err){
+            if(data){
+                res.send({
+                    message: `Product Found ${data._id}`,
+                    data: data
+                });
+
+            }
+            else{
+                res.status(404).send({
+                    message: "Product Not Found",
+                })
+            }
         }
-    }
-    if(isProductFound === false){
-        res.status(404);
-        res.send({
-            message: "Could't Find This Product"
-        });
-    }
+        else{
+            res.status(500).send({
+                message: "Server Error",
+            })
+        }
+    })
 })
 
-app.delete('/product/:id', (req, res)=>{
-    let isProductFound = false;
+
+// res.send({
+//     message: "Could't Find This Product"
+// });
+
+app.delete('/product/:id', (req, res) => {
     const id = req.params.id;
-    for(let i = 0; i<products.length; i++){
-        if(products[i].id == id){
-            products.splice(i, 1);
-            res.send({
-                message: "Product Deleted Successfully!"
-            });
-            isProductFound = true
+
+    productModel.deleteOne({ _id: id }, (err, deletedData) => {
+        console.log("deleted: ", deletedData);
+        if (!err) {
+
+            if (deletedData.deletedCount !== 0) {
+                res.send({
+                    message: "Product Deleted Successfully!"
+                });
+            } else {
+                res.status(404);
+                res.send({
+                    message:"Could't Find This Product"
+                });
+            }
+        } else {
+            res.status(500).send({
+                message: "server error"
+            })
         }
-    }
-    if(isProductFound === false){
-        res.status(404);
-        res.send({
-            message:"Could't Find This Product"
-        });
-    }
+    });
 })
+
+
+
 
 app.put('/products/:id', (req,res)=>{
     const id = req.params.id
