@@ -139,39 +139,44 @@ app.delete('/product/:id', (req, res) => {
 
 
 
-app.put('/products/:id', (req,res)=>{
-    const id = req.params.id
+app.put('/product/:editId', async (req, res) => {
 
-    if(!body.name || !body.price || !body.description){
-        res.status(404);
-        res.send({
-            message: "All Inputs Are Required"
+    const body = req.body;
+    const id = req.params.editId;
+
+    if ( // validation
+    !body.name
+    && !body.price
+    && !body.description
+    ) {
+        res.status(400).send({
+            message: "required parameters missing"
         });
         return;
     }
 
-    let isProductFound = false;
-    for(let i = 0; i<products.length; i++){
-        if(products[i].id == id){
-            products[i].name = body.name;
-            products[i].price = body.name;
-            products[i].description = body.description;
-            res.send({
-                message: "Product Edited!"
-            });
-            isProductFound = true;
-            break;
-        }
-    }
-    if(isProductFound === false){
-        res.status(404);
-        res.send({
-            message: "Could't Find This Product"
-        });
-    }
-    
-})
+    try {
+        let data = await productModel.findByIdAndUpdate(id,
+            {
+                name: body.name,
+                price: body.price,
+                description: body.description
+            },
+            { new: true }
+        ).exec();
 
+        console.log('updated: ', data);
+
+        res.send({
+            message: "product modified successfully"
+        });
+
+    } catch (error) {
+        res.status(500).send({
+            message: "server error"
+        })
+    }
+})
 
 const __dirname = path.resolve();
 

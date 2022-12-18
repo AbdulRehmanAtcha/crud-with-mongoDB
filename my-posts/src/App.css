@@ -85,3 +85,35 @@ body{
   color: aliceblue;
   cursor: pointer;
 }
+.show{
+  display: block;
+}
+.hide{
+  display: none;
+}
+
+.edit form{
+  background-color: #aaaaaa;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 15px;
+  height: 400px;
+  width: 400px;
+}
+.edit form input{
+  width: 97%;
+  height: 35px;
+  border-radius: 8px;
+}
+.edit form button{
+  height: 40px;
+  width: 97%;
+  border: none;
+  background-color: #28A745;
+  border-radius: 8px;
+  color: aliceblue;
+  cursor: pointer;
+}

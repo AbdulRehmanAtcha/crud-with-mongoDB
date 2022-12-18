@@ -11,10 +11,15 @@ if (window.location.href.split(":")[0] === "http") {
 function App() {
   const [products, setProducts] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
+  // const [showEdit, setShowEdit] = useState(false);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editPrice, setEditPrice] = useState("");
+  const [editDesc, setEditDesc] = useState("");
 
   const addObj = {
     name: name,
@@ -46,24 +51,7 @@ function App() {
       })
   }
 
-  const hideEditBox = (e) => {
-    e.preventDefault();
-    setShowEdit(false);
 
-    // axios.put(`${baseUrl}/product/${editId}`, {
-    //   name: name,
-    //   price: price,
-    //   description: description
-
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     allPosts();
-
-    //   }, (error) => {
-    //     console.log(error);
-    //   });
-  }
 
   const allPosts = async () => {
     try {
@@ -77,6 +65,7 @@ function App() {
     }
 
   }
+
 
   useEffect(() => {
     allPosts();
@@ -94,6 +83,40 @@ function App() {
     }
   }
 
+  const editHandler = async(e)=>{
+    setShowEdit(true);
+  }
+
+
+  const updateHandler = (event)=>{
+    event.preventDefault();
+    setShowEdit(false);
+    let newName = editName;
+    let newPrice = editPrice;
+    let newDesc = editDesc;
+    axios.put(`${baseUrl}/product/${editId}`,{
+      name: newName,
+      price: newPrice,
+      description: newDesc,
+    })
+    .then((response) => {
+      console.log(response);
+      allPosts();
+     
+    }, (error) => {
+      console.log(error);
+    });
+  }
+  const editNameHandler = (e)=>{
+    setEditName(e.target.value);
+  }
+
+  const editPriceHandler = (e)=>{
+    setEditPrice(e.target.value);
+  }
+  const editDescHandler = (e)=>{
+    setEditDesc(e.target.value);
+  }
 
 
   return (
@@ -122,19 +145,14 @@ function App() {
               <button type='submit'>ADD</button>
             </form>
           </div>
+          <div className={showEdit ? "edit show": "edit hide"}>
+            <form onSubmit={updateHandler}>
+              <input type="text" onChange={editNameHandler} placeholder="New Name"/>
+              
+              <input type="number" placeholder="New Price" onChange={editPriceHandler}/>
 
-          <div className={showEdit ? "box show-edit" : "box hide-edit"}>
-            <form onSubmit={hideEditBox}>
-              <input type="text" placeholder='Name Of Product.' required minLength="3" onChange={(e) => {
-                setName(e.target.value)
-              }} />
-              <input type="number" placeholder='Enter Product Price' required onChange={(e) => {
-                setPrice(e.target.value);
-              }} />
-              <textarea cols="50" rows="8" placeholder='Enter Product Description.' required minLength="3" maxLength="100" onChange={(e) => {
-                setDescription(e.target.value);
-              }} ></textarea>
-              <button type='submit' onClick={hideEditBox}>UPDATE</button>
+              <textarea cols="50" rows="8" onChange={editDescHandler}></textarea>
+              <button type='submit'>Update</button>
             </form>
           </div>
         </div>
@@ -146,6 +164,7 @@ function App() {
               <th scope="col">Product Name</th>
               <th scope="col">Product Price</th>
               <th scope="col">Product Description</th>
+              <th scope="col">Edit Choice</th>
               <th scope="col">Delete Choice</th>
             </tr>
           </thead>
@@ -156,6 +175,12 @@ function App() {
                 <td>{eachProduct.name}</td>
                 <td>{eachProduct.price}</td>
                 <td>{eachProduct.description}</td>
+                <td><button className="btn btn-primary" onClick={() => {
+                  editHandler(
+                    setEditId(eachProduct._id)
+                  )
+
+                }}>Edit</button></td>
                 <td><button className="btn btn-danger" onClick={() => {
                   deletProduct(eachProduct._id)
                 }}>DELETE</button></td>
